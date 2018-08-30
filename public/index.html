@@ -4,8 +4,44 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <link rel="icon" href="<%= BASE_URL %>logo.png">
     <title>vue-eleme</title>
+    <script>
+      var docEl = document.documentElement;
+      var dpr = window.devicePixelRatio || 1;
+      docEl.setAttribute('data-dpr', dpr);
+
+      // set 1rem = viewWidth / 10
+      function setRemUnit () {
+        var _fontSize;
+        var w = docEl.clientWidth;
+        var rem = w / 10;
+        _fontSize = rem >= 32 ? rem : 32;
+        docEl.style.fontSize = _fontSize + 'px';
+      }
+      setRemUnit();
+
+      window.addEventListener('pageshow', function (e) {
+        if (e.persisted) {
+          setRemUnit();
+        }
+      });
+
+      window.addEventListener('resize', setRemUnit);
+
+      // detect 0.5px supports
+      if (dpr >= 2) {
+        var fakeBody = document.createElement('body');
+        var testElement = document.createElement('div');
+        testElement.style.border = '.5px solid transparent';
+        fakeBody.appendChild(testElement);
+        docEl.appendChild(fakeBody);
+        if (testElement.offsetHeight === 1) {
+          docEl.classList.add('hairlines');
+        }
+        docEl.removeChild(fakeBody);
+      } 
+    </script>
   </head>
   <body>
     <noscript>
